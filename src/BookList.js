@@ -1,26 +1,20 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import Book from './Book';
 
 
-class BookList extends Component {
+function BookList(props){
+    const { onChangeBooksStatus, books, loading } = props;
 
-    render(){
-        let { books } = this.props;
-        if( !books){
-            books = [];
-        }
-        return (
-            <div className="bookshelf-books">
-                <ol className="books-grid">
-                    {books.length > 0
-                        ? books.map((book) => <li key={book.id}><Book book={book}/></li>)
-                        : `No books`
-                    }
-                </ol>
-            </div>
-        );
-    }
-
+    return (
+        <div className="bookshelf-books">
+            <ol className="books-grid">
+                {books.length > 0
+                    ? books.map((book) => <li key={book.id}><Book book={book} onChangeBooksStatus={onChangeBooksStatus} loading={loading}/></li>)
+                    : `No books`
+                }
+            </ol>
+        </div>
+    );
 }
 
 export default  BookList;

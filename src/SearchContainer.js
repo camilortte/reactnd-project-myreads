@@ -8,7 +8,8 @@ class SearchContainer extends Component {
 
     state = {
         query: '',
-        searchResult: []
+        searchResult: [],
+        loading: false
     };
 
     handleChange = (event) => {
@@ -20,15 +21,33 @@ class SearchContainer extends Component {
         // TODO: Loading gif..
         const { query } = this.state;
         if( query !== '' && query !== undefined){
+            this.setState({loading: true});
             search(query)
                 .then((result) => {
-                   this.setState({searchResult: result});
-                });
+                    // Update Shelf for books results
+                    const { myBooks } = this.props;
+                    result.map((item) => {
+                        const bookExist = myBooks.find((book) => book.id === item.id);
+                        if(bookExist){
+                            item.shelf = bookExist.shelf
+                        }
+                        return item;
+                    });
+                    this.setState({searchResult: result});
+                })
+                .catch(error => {
+                    console.log(`Error: ${error.message}`);
+                    this.setState({searchResult: []});
+                })
+                .finally(() => this.setState({loading: false}));
+
         }
     };
 
     render(){
-        const { query, searchResult } = this.state;
+        const { query, searchResult, loading } = this.state;
+        const { onChangeBooksStatus } = this.props;
+
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -37,8 +56,11 @@ class SearchContainer extends Component {
                         <input type="text" placeholder="Search by title or author" onChange={this.handleChange} value={query}/>
                     </form>
                 </div>
-
-                <BookList books={searchResult} />
+                <div className="search-books-results">
+                    {loading
+                        ? <div className="bookshelf-books">...Loading...</div>
+                        : <BookList books={searchResult} onChangeBooksStatus={onChangeBooksStatus}/>}
+                </div>
             </div>
         );
     }

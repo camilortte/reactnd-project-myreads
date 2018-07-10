@@ -1,18 +1,22 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import Category from './Category';
 
 
-class CategoryList extends Component {
+function CategoryList(props){
 
-    render(){
-        const { categories } = this.props;
+    const { categories, myBooks, onChangeBooksStatus, loading } = props;
 
-        return (
-            <div className="list-books-content">
-                {categories.map((category) => <Category key={category} name={category}/>)}
-            </div>
-        );
-    }
+    return (
+        <div className="list-books-content">
+            {categories.map((shelf) =>
+                <Category key={shelf.id} name={shelf.id}
+                          books={myBooks.filter((book) => book.shelf === shelf.id)}
+                          onChangeBooksStatus={onChangeBooksStatus}
+                          loading={loading}
+                />
+            )}
+        </div>
+    );
 
 }
 
