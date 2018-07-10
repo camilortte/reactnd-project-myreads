@@ -25,7 +25,7 @@ class App extends React.Component {
 
     changeBooksStatus = (book, shelf) => {
         const { myBooks } = this.state;
-        this.setState({loading: {updateBook: true} });
+        this.setState({loading: {updateBook: true, getAll: false} });
         BooksAPI.update(book, shelf)
             .then((response) => {
                 const bookExist = myBooks.find(({ id }) => id === book.id);
@@ -54,7 +54,7 @@ class App extends React.Component {
                 }
             })
             .catch(error => console.log(`Error: ${error.message}`))
-            .finally(() =>  this.setState({loading: {updateBook: false} }) );
+            .finally(() =>  this.setState({loading: {updateBook: false, getAll: false} }) );
     };
 
     componentDidMount(){
@@ -65,7 +65,7 @@ class App extends React.Component {
                     myBooks: response
                 });
             })
-            .finally(() =>  this.setState({loading: {getAll: false} }) );
+            .finally(() =>  this.setState({loading: {updateBook: false, getAll: false} }) );
     }
 
     render() {

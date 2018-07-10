@@ -3,10 +3,7 @@ import BookList from './BookList';
 import { Link } from 'react-router-dom';
 import { search }  from './BooksAPI';
 import PropTypes from "prop-types";
-
-
-const WAIT_INTERVAL = 500;
-const ENTER_KEY = 13;
+import debounce from 'lodash.debounce';
 
 
 class SearchContainer extends Component {
@@ -17,20 +14,18 @@ class SearchContainer extends Component {
         loading: false
     };
 
-    componentWillMount() {
-        this.timer = null;
+    constructor(props){
+        super(props);
+        this.emitChange = debounce(this.emitChange, 250)
+    }
+
+    componentWillUnmount() {
+        this.emitChange.cancel();
     }
 
     handleChange = (event) => {
-        clearTimeout(this.timer);
         this.setState({query: event.target.value});
-        this.timer = setTimeout(this.submitForm, WAIT_INTERVAL);
-    };
-
-    handleKeyDown = (event) => {
-        if (event.keyCode === ENTER_KEY) {
-            this.submitForm();
-        }
+        this.emitChange(event.target.value);
     };
 
     submitForm = (event) => {
@@ -39,6 +34,10 @@ class SearchContainer extends Component {
         }
 
         const { query } = this.state;
+        this.emitChange(query);
+    };
+
+    emitChange(query){
         if( query !== '' && query !== undefined){
             this.setState({loading: true});
             search(query)
@@ -63,7 +62,7 @@ class SearchContainer extends Component {
         }else{
             this.setState({searchResult: []});
         }
-    };
+    }
 
     render(){
         const { query, searchResult, loading } = this.state;
@@ -80,7 +79,7 @@ class SearchContainer extends Component {
                 <div className="search-books-results">
                     {loading
                         ? <div className="bookshelf-books">...Loading...</div>
-                        : <BookList books={searchResult} onChangeBooksStatus={onChangeBooksStatus}/>}
+                        : <BookList books={searchResult} onChangeBooksStatus={onChangeBooksStatus} loading={false}/>}
                 </div>
             </div>
         );
