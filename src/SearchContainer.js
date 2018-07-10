@@ -4,6 +4,10 @@ import { Link } from 'react-router-dom';
 import { search }  from './BooksAPI';
 
 
+const WAIT_INTERVAL = 500;
+const ENTER_KEY = 13;
+
+
 class SearchContainer extends Component {
 
     state = {
@@ -12,13 +16,27 @@ class SearchContainer extends Component {
         loading: false
     };
 
+    componentWillMount() {
+        this.timer = null;
+    }
+
     handleChange = (event) => {
+        clearTimeout(this.timer);
         this.setState({query: event.target.value});
+        this.timer = setTimeout(this.submitForm, WAIT_INTERVAL);
+    };
+
+    handleKeyDown = (event) => {
+        if (event.keyCode === ENTER_KEY) {
+            this.submitForm();
+        }
     };
 
     submitForm = (event) => {
-        event.preventDefault();
-        // TODO: Loading gif..
+        if( event ){
+            event.preventDefault();
+        }
+        
         const { query } = this.state;
         if( query !== '' && query !== undefined){
             this.setState({loading: true});
@@ -41,6 +59,8 @@ class SearchContainer extends Component {
                 })
                 .finally(() => this.setState({loading: false}));
 
+        }else{
+            this.setState({searchResult: []});
         }
     };
 
@@ -53,7 +73,7 @@ class SearchContainer extends Component {
                 <div className="search-books-bar">
                     <Link className="close-search" to="/">Close</Link>
                     <form className="search-books-input-wrapper" onSubmit={this.submitForm}>
-                        <input type="text" placeholder="Search by title or author" onChange={this.handleChange} value={query}/>
+                        <input type="text" placeholder="Search by title or author" onChange={this.handleChange} value={query} onKeyDown={this.handleKeyDown}/>
                     </form>
                 </div>
                 <div className="search-books-results">

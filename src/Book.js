@@ -32,7 +32,7 @@ class Book extends React.Component {
                     <div className="book-cover" style={{
                         width: 128,
                         height: 188,
-                        backgroundImage: `url("${book.imageLinks.thumbnail}")`
+                        backgroundImage: (book.imageLinks) ? `url("${book.imageLinks.thumbnail}")` : 'none'
                     }}></div>
                     <div className="book-shelf-changer">
                         <select value={shelf} onChange={this.handleChange} disabled={loading}>
