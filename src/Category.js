@@ -1,5 +1,6 @@
 import React from 'react';
 import BookList from './BookList';
+import PropTypes from "prop-types";
 
 
 function Category(props){
@@ -12,5 +13,12 @@ function Category(props){
         </div>
     );
 }
+
+Category.propTypes = {
+    name: PropTypes.string.isRequired,
+    books: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
+    onChangeBooksStatus: PropTypes.func.isRequired
+};
 
 export default  Category;

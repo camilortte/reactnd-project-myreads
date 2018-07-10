@@ -1,5 +1,6 @@
 import React  from 'react';
 import Book from './Book';
+import PropTypes from "prop-types";
 
 
 function BookList(props){
@@ -16,5 +17,12 @@ function BookList(props){
         </div>
     );
 }
+
+BookList.propTypes = {
+    books: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
+    onChangeBooksStatus: PropTypes.func.isRequired
+};
+
 
 export default  BookList;

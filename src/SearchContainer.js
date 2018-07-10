@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BookList from './BookList';
 import { Link } from 'react-router-dom';
 import { search }  from './BooksAPI';
+import PropTypes from "prop-types";
 
 
 const WAIT_INTERVAL = 500;
@@ -36,7 +37,7 @@ class SearchContainer extends Component {
         if( event ){
             event.preventDefault();
         }
-        
+
         const { query } = this.state;
         if( query !== '' && query !== undefined){
             this.setState({loading: true});
@@ -86,5 +87,10 @@ class SearchContainer extends Component {
     }
 
 }
+
+SearchContainer.propTypes = {
+    onChangeBooksStatus: PropTypes.func.isRequired
+};
+
 
 export default  SearchContainer;

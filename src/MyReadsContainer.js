@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CategoryList from "./CategoryList";
+import PropTypes from 'prop-types';
 
 
 function MyReadsContainer(props){
@@ -24,5 +25,13 @@ function MyReadsContainer(props){
         </div>
     );
 }
+
+MyReadsContainer.propTypes = {
+    categories: PropTypes.array.isRequired,
+    myBooks: PropTypes.array.isRequired,
+    loading: PropTypes.object.isRequired,
+    onChangeBooksStatus: PropTypes.func.isRequired
+};
+
 
 export default  MyReadsContainer;
