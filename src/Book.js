@@ -44,11 +44,14 @@ class Book extends React.Component {
                         </select>
                     </div>
                 </div>
-                { loading && <div className="book-title">Updating</div>}
-                <div className="book-title">{book.title}</div>
-                {book.authors && book.authors.map((author) =>
-                    <div className="book-authors" key={author}> {author} </div>
-                )}
+                { loading
+                    ? (<div className="book-title">Updating</div>)
+                    : ( <div><div className="book-title">{book.title}</div>
+                        {book.authors && book.authors.map((author) =>
+                            <div className="book-authors" key={author}> {author} </div>
+                        )}</div>
+                    )
+                }
             </div>
         );
     }
